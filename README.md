@@ -68,6 +68,7 @@ Key:Bind(KeyName: string|Enum.KeyCode) -> Connection
 ```
 ```lua
 Capture.A:Bind('F')
+Capture.F:Connect(...) 
 ```
 
 > Rebinds ```Key``` to a new ```KeyName```
