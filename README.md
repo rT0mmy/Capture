@@ -22,6 +22,9 @@
 > **Warning** <br>
 > Capture is still under development, major changes might occur.
 
+> **Note** <br>
+> This implementation does not feature maids, all scriptevents are handled by a separate API - [Event](https://github.com/rT0mmy/event)
+
 <br><br><br><br>
 
 ## Why Capture?
