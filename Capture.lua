@@ -2,7 +2,7 @@
 
 local UserInputService = game:GetService('UserInputService')
 
-local DeclarationAmbiguous = {
+local KeyCodes = {
 	Ctrl = "LeftControl";
 	Cmd = "LeftControl";
 	Command = "LeftControl";
@@ -29,8 +29,8 @@ local DeclarationAmbiguous = {
 
 	['['] = "LeftBracket";
 	[']'] = "RightBracket";
-	['\''] = "BackSlash";
-	['\''] = "Quote";
+	[ [[\]]] = "BackSlash";
+	["'"] = "Quote";
 	[';'] = "Semicolon";
 	[','] = "Comma";
 	['.'] = "Period";
@@ -106,12 +106,18 @@ function M:Connect(f:()->any): Event.Connection
 end
 
 function M:Bind(KeyName)
-	local KeyCode = Enum.KeyCode[DeclarationAmbiguous[KeyName] or KeyName]
+	local KeyCode = Enum.KeyCode[KeyCodes[KeyName] or KeyName]
 	if M.Keys[KeyCode.Value] then
 		warn('Key '..KeyName..' is already in use.')
 	else
 		M.Keys[KeyCode.Value] = M.new(KeyCode, self.Event)
 		M.Keys[self.KeyCode.Value] = nil
+	end
+end
+
+function M:Map(Keys:{[string]: string})
+	for i,v in Keys do
+
 	end
 end
 
@@ -132,6 +138,18 @@ local function doesEnumExist(enumList: Enum, enumItem: string)
 	return nil
 end
 
+local function getKeycode(KeyName)
+	for _,item in Enum.KeyCode:GetEnumItems() do
+		if item.Name == KeyName then
+			return Enum.KeyCode[KeyName]
+		end
+
+		if item.Name == KeyCodes[KeyName] then
+			return Enum.KeyCode[KeyCodes[KeyName]]
+		end
+	end
+end
+
 return setmetatable({
 	Pause = function(self)
 		M.InputBegan:Disconnect()
@@ -148,7 +166,7 @@ return setmetatable({
 	end;
 },{
 	__index = function(self, k)
-		local KeyCode = doesEnumExist(Enum.KeyCode, k)
+		local KeyCode = getKeycode(k)
 
 		if KeyCode then
 			if not M.Keys[KeyCode.Value] then
